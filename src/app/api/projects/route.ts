@@ -10,7 +10,7 @@ export async function GET() {
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { data, error } = await supabaseAdmin
-      .from('projects')
+      .from('sf_projects')
       .select('*')
       .eq('owner_id', user.id)
       .order('created_at', { ascending: false });
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     
     const { data, error } = await supabaseAdmin
-      .from('projects')
+      .from('sf_projects')
       .insert({
         name,
         slug,
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
 
     if (error) throw error;
 
-    await supabaseAdmin.from('audit_logs').insert({
+    await supabaseAdmin.from('sf_audit_logs').insert({
       user_id: user.id,
       project_id: data.id,
       action: 'project.created',
