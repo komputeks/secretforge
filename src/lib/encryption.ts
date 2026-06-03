@@ -6,13 +6,14 @@ const KEY_LENGTH = 32;
 const IV_LENGTH = 16;
 
 export function deriveProjectKey(projectId: string): Buffer {
-  return crypto.hkdfSync(
+  const key = crypto.hkdfSync(
     'sha256',
     Buffer.from(MASTER_KEY, 'hex'),
     Buffer.from('secretforge-v1', 'utf8'),
     Buffer.from(projectId, 'utf8'),
     KEY_LENGTH
   );
+  return Buffer.from(key);
 }
 
 export function encryptSecret(plaintext: string, projectId: string) {
